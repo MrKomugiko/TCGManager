@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="TCGManager.Views.CardCollectionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TCGManager.Views"
+             xmlns:viewModel="clr-namespace:TCGManager.ViewModels" d:DataContext="{d:DesignInstance Type=viewModel:CardCollectionViewModel}"
+             mc:Ignorable="d" 
+             x:Name="This">
+
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10">
+        <TextBlock>
+            <TextBlock.Text>
+                <MultiBinding StringFormat='Cards non-land in Collection: {0} [{1}]'>
+                    <Binding Path="CollectionSize_SumAll" Mode="OneWay" />
+                    <Binding Path="CollectionSize_CountUnique" Mode="OneWay"/>
+                </MultiBinding>
+            </TextBlock.Text>
+        </TextBlock>
+
+        <ListView Name="CardsList" ItemsSource="{Binding model}" SelectedItem="{Binding CurrentSelectedCard}" Height="570" Width="461" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal"  Width="430">
+                        <Image VerticalAlignment="Center"
+                       HorizontalAlignment="Center" 
+                       Stretch="UniformToFill" 
+                       Source="{Binding cards.GetFormattedImageURL}"
+                       Width="120" 
+                       Height="80"
+                               Margin="-30,-30,-15,0"
+                       >
+                            <Image.Clip>
+                                <RectangleGeometry RadiusX="15"
+                                           RadiusY="15"
+                                           Rect="30,30,75,50"/>
+                            </Image.Clip>
+                        </Image>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Width="385">
+                                <TextBlock FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center" Width="30" Height="25" FontSize="20" Text="{Binding quantity}" Padding="0,0,5,0"/>
+                                <TextBlock Height="25" Width="217" FontSize="20" Text="{Binding cards.name}"/>
+                                <TextBlock Foreground="Black" FontWeight="Thin" Padding="0,0,7,0" Height="25" 
+                                           FontSize="12" TextAlignment="Right" Text="{Binding cards.GetColorString}" Width="110"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5,1,1,1" Width="385">
+                                <StackPanel Orientation="Horizontal" Width="245">
+                                    <TextBlock Foreground="Gray" Height="25" FontSize="15" Text="{Binding cards.type}"/>
+                                    <TextBlock Foreground="Gray" Height="25" FontSize="15" Margin="5,0,0,0">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat='({0}/{1})'>
+                                                <Binding Path="cards.power" Mode="OneWay" />
+                                                <Binding Path="cards.toughness" Mode="OneWay"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                                <TextBlock Foreground="Black" Width="110" FontWeight="Thin" Padding="0,0,7,0" Height="25" 
+                                           FontSize="12" TextAlignment="Right" Text="{Binding cards.setName}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackPanel>
+    
+</UserControl>

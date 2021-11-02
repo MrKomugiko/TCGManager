@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -120,6 +121,7 @@ namespace TCGManager.ViewModels
                         }
                         else
                         {
+                            if (foundcard == null) return;
                             CardDetailsVM.SelectedCard = foundcard;
                             ClearInputFields();
                         }
@@ -152,7 +154,7 @@ namespace TCGManager.ViewModels
             CardCollection.MyCardCollection.Reverse();
             CardCollection.AddCardToCollection(newCard);
             CardCollection.MyCardCollection.Reverse();
-            cardCollectionVM.RefreshListUI();
+            cardCollectionVM.RefreshListUI(new ObservableCollection<CardCollectionData>(CardCollection.MyCardCollection));
         }
 
         private bool _isGetDataFromInternetEnabled;

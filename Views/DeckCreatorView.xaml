@@ -10,7 +10,7 @@
              d:DataContext="{d:DesignInstance Type=viewmodels:DeckCreatorViewModel}"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <CollectionViewSource x:Key="Cards" Source="{Binding DeckCardsCollection}">
+        <CollectionViewSource x:Key="GroupedCards" Source="{Binding DeckCardsCollection}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="Category"/>
             </CollectionViewSource.GroupDescriptions>
@@ -45,131 +45,10 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Margin="5" Background="DarkGray" Height="auto">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Bottom"  Width="auto">
-                    <TextBlock Text="opcje sortowania" Background="Gray" Height="347" Margin="0,0,10,0"></TextBlock>
+                    <local:CollectionFilteringView Height="347" Margin="0,0,10,0" DataContext="{Binding fcVM}"/>
                     <views:CardCollectionsView DataContext="{Binding ccVM}" Height="250" Margin="-10,0,0,-8"/>
                 </StackPanel>
-                <!--  
-
-                <ListView Width="auto" ItemsSource="{Binding Path=Groups, Source={StaticResource Cards}}">
-                    <ListView.View>
-                        <GridView>
-                            <GridView.Columns>
-                                <GridViewColumn Header="Category" DisplayMemberBinding="{Binding Name}"/>
-                                <GridViewColumn Width="345">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ItemsControl ItemsSource="{Binding Items}" Height="auto">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal"  Width="auto" Height="52">
-                                                            <Image VerticalAlignment="Center" 
-                                                                       HorizontalAlignment="Center" 
-                                                                       Stretch="UniformToFill" 
-                                                                       Source="{Binding cards.GetFormattedImageURL}"
-                                                                       Width="150" 
-                                                                       Height="100"
-                                                                       Margin="-42,-60,-28,-50">
-                                                                <Image.Clip>
-                                                                    <RectangleGeometry RadiusX="10" RadiusY="10" Rect="45,30,75,50"/>
-                                                                </Image.Clip>
-                                                            </Image>
-                                                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                                                <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Center">
-
-                                                                    <TextBlock Width="250" FontSize="20" Text="{Binding cards.name}"/>
-                                                                    <TextBlock Foreground="Black" FontWeight="Thin" Padding="0,0,7,0" Height="25" FontSize="12" 
-                                                               TextAlignment="Right" Text="{Binding cards.GetColorString}" Width="120"/>
-                                                                </StackPanel>
-                                                                <StackPanel Orientation="Horizontal" Width="385">
-                                                                    <StackPanel Orientation="Horizontal" Width="265">
-                                                                        <TextBlock Foreground="Gray" Height="25" FontSize="15" Text="{Binding cards.type}"/>
-                                                                        <TextBlock Foreground="Gray" Height="25" FontSize="15">
-                                                                            <TextBlock.Text>
-                                                                                <MultiBinding StringFormat='({0}/{1})'>
-                                                                                    <Binding Path="cards.power" Mode="OneWay" />
-                                                                                    <Binding Path="cards.toughness" Mode="OneWay"/>
-                                                                                </MultiBinding>
-                                                                            </TextBlock.Text>
-                                                                        </TextBlock>
-                                                                    </StackPanel>
-
-                                                                </StackPanel>
-                                                            </StackPanel>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView.Columns>
-                        </GridView>
-                    </ListView.View>
-
-                </ListView>
-       
--->
-                
-                <!--
-                <StackPanel Orientation="Vertical">
-                    <DataGrid SelectionMode="Single" ItemsSource="{Binding DeckCardsCollection}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden" 
-                              AutoGenerateColumns="False" SelectedItem="{Binding CurrentSelectedCard}" IsReadOnly="True" Width="430" Height="600">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Quantity" Width="60">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center" Width="30" Height="25" FontSize="20" 
-                                                               Text="{Binding quantity}" Padding="0,0,5,0"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Card" Width="auto" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal"  Width="auto" Height="52">
-                                            <Image VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center" 
-                                               Stretch="UniformToFill" 
-                                               Source="{Binding cards.GetFormattedImageURL}"
-                                               Width="150" 
-                                               Height="100"
-                                               Margin="-42,-60,-28,-50">
-                                                <Image.Clip>
-                                                    <RectangleGeometry RadiusX="10" RadiusY="10" Rect="45,30,75,50"/>
-                                                </Image.Clip>
-                                            </Image>
-                                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                                <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Center">
-                                                  
-                                                    <TextBlock Width="250" FontSize="20" Text="{Binding cards.name}"/>
-                                                    <TextBlock Foreground="Black" FontWeight="Thin" Padding="0,0,7,0" Height="25" FontSize="12" 
-                                                               TextAlignment="Right" Text="{Binding cards.GetColorString}" Width="120"/>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Width="385">
-                                                    <StackPanel Orientation="Horizontal" Width="265">
-                                                        <TextBlock Foreground="Gray" Height="25" FontSize="15" Text="{Binding cards.type}"/>
-                                                        <TextBlock Foreground="Gray" Height="25" FontSize="15">
-                                                            <TextBlock.Text>
-                                                                <MultiBinding StringFormat='({0}/{1})'>
-                                                                    <Binding Path="cards.power" Mode="OneWay" />
-                                                                    <Binding Path="cards.toughness" Mode="OneWay"/>
-                                                                </MultiBinding>
-                                                            </TextBlock.Text>
-                                                        </TextBlock>
-                                                    </StackPanel>
-
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-           -->
-
-                <ListView ItemsSource='{Binding Source={StaticResource Cards}}' SelectedItem="{Binding CurrentSelectedCard}"  BorderThickness="0" Width="430">
+                <ListView ItemsSource='{Binding Source={StaticResource GroupedCards}}' SelectedItem="{Binding CurrentSelectedCard}"  BorderThickness="0" Width="430">
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.ContainerStyle>
@@ -181,7 +60,7 @@
                                                 <Expander IsExpanded="True" BorderBrush="#FFA4B97F" BorderThickness="0,0,0,1">
                                                     <Expander.Header>
                                                         <DockPanel>
-                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100"/>
+                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,5,0" Width="auto"/>
                                                             <TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}"/>
                                                         </DockPanel>
                                                     </Expander.Header>
@@ -198,8 +77,7 @@
                     </ListView.GroupStyle>
                     <ListView.View>
                         <GridView>
-  
-                            <GridViewColumn Width="auto"  Header="Name">
+                            <GridViewColumn Width="auto"  Header="Deck">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal"  Width="auto" Height="52">
@@ -216,10 +94,9 @@
                                             </Image>
                                             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                                                 <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Center">
-
+                                                    <TextBlock FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center" Width="30" Height="25" FontSize="20" Text="{Binding quantity}" Padding="0,0,5,0"/>
                                                     <TextBlock Width="205" FontSize="20" Text="{Binding cards.name}"/>
-                                                    <TextBlock Foreground="Black" FontWeight="Thin" Padding="0,0,7,0" Height="25" FontSize="12" 
-                                                               TextAlignment="Right" Text="{Binding cards.GetColorString}" Width="120"/>
+                                                    <TextBlock Foreground="Black" FontWeight="Thin" Padding="0,0,7,0" Height="25" FontSize="12"  TextAlignment="Right" Text="{Binding cards.GetColorString}" Width="120"/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Width="380">
                                                     <StackPanel Orientation="Horizontal" Width="215">
@@ -240,13 +117,9 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            
-                     
                         </GridView>
                     </ListView.View>
                 </ListView>
-
-
             </StackPanel>
         </StackPanel>
     </Grid>

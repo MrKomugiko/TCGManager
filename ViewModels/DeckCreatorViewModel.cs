@@ -13,14 +13,14 @@ namespace TCGManager.ViewModels
 {
     public class DeckCreatorViewModel : ViewModelBase
     {
+        public string GroupBy { get; set; }
         public CardDetailViewModel CardDetailsVM { get; set; }
         public CardCollectionViewModel ccVM { get; set; }
+
         private readonly NavigationStore navigationStore;
+
         private ObservableCollection<CardCollectionData> _deckCardsCollection;
-        public ObservableCollection<CardCollectionData> PlaneswalkersList => new ObservableCollection<CardCollectionData>(DeckCardsCollection.Where(c => c.cards.type.Contains("Planeswalker")).ToList());
-        public ObservableCollection<CardCollectionData> CreaturesList => new ObservableCollection<CardCollectionData>(DeckCardsCollection.Where(c => c.cards.type.Contains("Creature")).ToList());
-        public ObservableCollection<CardCollectionData> LandsList => new ObservableCollection<CardCollectionData>(DeckCardsCollection.Where(c => c.cards.type.Contains("Land")).ToList());
-        public ObservableCollection<CardCollectionData> SkillsList => new ObservableCollection<CardCollectionData>(DeckCardsCollection.Where(c => c.cards.type.Contains("Creature") == false && c.cards.type.Contains("Land") == false && c.cards.type.Contains("Planeswalker") == false).ToList());
+        public CollectionFilteringViewModel fcVM { get; set; }
 
         public ICommand AddCardToDeckCommand { get; set; }
         public ICommand NavigateToMainWindowCommand { get; set; }
@@ -32,7 +32,7 @@ namespace TCGManager.ViewModels
             this.ccVM = ccVM;
             _navigationStore = navigationStore;
             _navigationStore.CurrentViewModel = this;
-
+            this.fcVM = new CollectionFilteringViewModel(ccVM);
 
             // Navigation Commands:
             AddCardToDeckCommand = new RelayCommand(
@@ -76,6 +76,7 @@ namespace TCGManager.ViewModels
             get => CardDetailsVM.SelectedCard;
             set
             {
+                if (value == null) return;
                 CardDetailsVM.SelectedCard = value;
             }
         }
@@ -102,11 +103,8 @@ namespace TCGManager.ViewModels
             {
                 DeckCardsCollection.Add(new CardCollectionData(1, _card));
             }
-
-            OnPropertyChanged(nameof(PlaneswalkersList));
-            OnPropertyChanged(nameof(CreaturesList));
-            OnPropertyChanged(nameof(SkillsList));
-            OnPropertyChanged(nameof(CreaturesList));
         }
+    
+        
     }
 }

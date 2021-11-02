@@ -27,36 +27,37 @@ namespace TCGManager.ViewModels
             set
             {
                 _selectedCard = value;
-              if(_selectedCard.cards != null)
-                {
-                    OnPropertyChanged(
-                        nameof(Toughness),nameof(ManaCost),nameof(SetName),
-                        nameof(Flavor),nameof(Power),nameof(Type),nameof(Price),
-                        nameof(Description),nameof(Rarity),nameof(Name)
-
-                    );
-
-
-                    if (_selectedCard.cards.name != null)
+               
+                    if (_selectedCard.cards != null)
                     {
-                        if(File.Exists(_selectedCard.cards.GetFormattedImageURL) == true)
+                        OnPropertyChanged(
+                            nameof(Toughness), nameof(ManaCost), nameof(SetName),
+                            nameof(Flavor), nameof(Power), nameof(Type), nameof(Price),
+                            nameof(Description), nameof(Rarity), nameof(Name)
+
+                        );
+
+
+                        if (_selectedCard.cards.name != null)
                         {
-                            // załąduj z pamieci
-                            SelectedCardImageURL = _selectedCard.cards.GetFormattedImageURL;
-                        }
+                            if (File.Exists(_selectedCard.cards.GetFormattedImageURL) == true)
+                            {
+                                // załąduj z pamieci
+                                SelectedCardImageURL = _selectedCard.cards.GetFormattedImageURL;
+                            }
                             else
-                        {
-                            // sciagnij z neta
-                            SelectedCardImageURL = value.cards.imageUrl;
+                            {
+                                // sciagnij z neta
+                                SelectedCardImageURL = value.cards.imageUrl;
+                            }
+                            IsCardSelected = true;
                         }
-                        IsCardSelected = true;
+                        else
+                        {
+                            SelectedCardImageURL = AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\emptyCardImage.png";
+                            IsCardSelected = false;
+                        }
                     }
-                    else
-                    {
-                        SelectedCardImageURL = AppDomain.CurrentDomain.BaseDirectory + "\\Resources\\emptyCardImage.png";
-                        IsCardSelected = false;
-                    }
-                }
                 else
                     IsCardSelected = false;
                   

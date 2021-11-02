@@ -18,17 +18,19 @@ namespace TCGManager.ViewModels
         public CardCollectionViewModel(CardDetailViewModel cardDetailsVM)
         {
             CardDetailsVM = cardDetailsVM;
+            _model = new ObservableCollection<CardCollectionData>(CardCollection.MyCardCollection);
         }
 
+        private ObservableCollection<CardCollectionData> _model;
         public ObservableCollection<CardCollectionData> model 
         {
-            get => new ObservableCollection<CardCollectionData>(CardCollection.MyCardCollection);
+            get => _model;
             set
             {
-                CardCollection.MyCardCollection = value.ToList();
+                _model = value;
             }
         }
-        
+
         public int CollectionSize_CountUnique
         {
             get { return CardCollection.MyCardCollection.Where(c => c.cards.type.Contains("Land") == false).Count(); }
@@ -44,12 +46,14 @@ namespace TCGManager.ViewModels
             get => CardDetailsVM.SelectedCard;
             set
             {
+                if (value == null) return;
                 CardDetailsVM.SelectedCard = value;
             }
         }
 
-        internal void RefreshListUI()
+        internal void RefreshListUI(ObservableCollection<CardCollectionData> updatedData)
         {
+            _model = updatedData;
             OnPropertyChanged(nameof(model));
         }
     }

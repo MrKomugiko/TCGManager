@@ -26,7 +26,6 @@ namespace TCGManager.ViewModels
             this.findCardVM = new FindNewCardViewModel(cdVM);
             this.ccVM = new CardCollectionViewModel(cdVM);
             this.findCardVM.cardCollectionVM = ccVM;
-
         }
 
         private ICommand _downloadImagesCommd = null;

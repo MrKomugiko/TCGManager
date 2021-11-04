@@ -3,22 +3,180 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TCGManager.Views" xmlns:viewmodels="clr-namespace:TCGManager.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:CollectionFilteringViewModel}"
+             xmlns:local="clr-namespace:TCGManager.Views" 
+             xmlns:viewmodels="clr-namespace:TCGManager.ViewModels" 
+             xmlns:converter="clr-namespace:TCGManager.Converters" 
+             d:DataContext="{d:DesignInstance Type=viewmodels:CollectionFilteringViewModel}"
              mc:Ignorable="d" >
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="150"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Filter by name:" FontSize="15"/>
-        <TextBox Name="Filter_Name"  Grid.Column="1" Grid.Row="0" Text="Name..."/>
-        <Button Grid.Column="0" Grid.Row="1" Content=" Apply Filters" Width="75" Margin="2" 
+
+    <UserControl.Resources>
+        <converter:MyValueConverter x:Key="converter"/>
+
+        <Style x:Key="FilterButton" TargetType="ToggleButton">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="Command" Value="{Binding SetFilterPropertyCommand}"/>
+            <Setter Property="CommandParameter">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource converter}">
+                        <Binding RelativeSource="{RelativeSource Self}" Path="Name"/>
+                        <Binding RelativeSource="{RelativeSource Self}" Path="IsChecked"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+
+    <StackPanel Orientation="Vertical">
+    <!-- TITLE -->
+        <TextBlock Text="Advanced filter section" HorizontalAlignment="Center"  FontSize="20" FontWeight="Bold"/>
+
+    <!-- NAME -->        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" Text="Name" FontWeight="Bold" FontSize="15"/>
+            <TextBox Name="Filter_Name"  Grid.Column="1" Grid.Row="0" Text=""/>
+            <Button Grid.Column="2" Grid.Row="0" Content="Search" Width="75" Margin="2"
                 Command="{Binding SetFilterPropertyCommand}" 
                 CommandParameter="{Binding ElementName=Filter_Name, Path=Text}"/>
-    </Grid>
+        </Grid>
+
+    <!-- TYPE -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.RowSpan="2" Text="Type" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
+            <ToggleButton Name="ToggleButton_Land"          Style="{StaticResource FilterButton}"   Content="Land"          Grid.Row="0"    Grid.Column="1"/>
+            <ToggleButton Name="ToggleButton_Creature"      Style="{StaticResource FilterButton}"   Content="Creature"      Grid.Row="0"    Grid.Column="2"/>
+            <ToggleButton Name="ToggleButton_Sorcery"       Style="{StaticResource FilterButton}"   Content="Sorcery"       Grid.Row="0"    Grid.Column="3"/>
+            <ToggleButton Name="ToggleButton_Instant"       Style="{StaticResource FilterButton}"   Content="Instant"       Grid.Row="0"    Grid.Column="4"/>
+            <ToggleButton Name="ToggleButton_Artifact"      Style="{StaticResource FilterButton}"   Content="Artifact"      Grid.Row="1"    Grid.Column="1"/>
+            <ToggleButton Name="ToggleButton_Enchantment"   Style="{StaticResource FilterButton}"   Content="Enchantment"   Grid.Row="1"    Grid.Column="2"/>
+            <ToggleButton Name="ToggleButton_Planeswalker"  Style="{StaticResource FilterButton}"   Content="Planeswalker"  Grid.Row="1"    Grid.Column="3"     Grid.ColumnSpan="2"/>
+        </Grid>
+
+    <!-- COLOR -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+           
+            <TextBlock Grid.Column="0" Grid.RowSpan="2" Text="Color" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
+            <ToggleButton Name="ToggleButton_Black"     Style="{StaticResource FilterButton}"   Content="Black"     Grid.Row="0"    Grid.Column="1"/>
+            <ToggleButton Name="ToggleButton_Blue"      Style="{StaticResource FilterButton}"   Content="Blue"      Grid.Row="0"    Grid.Column="2"/>
+            <ToggleButton Name="ToggleButton_White"     Style="{StaticResource FilterButton}"   Content="White"     Grid.Row="0"    Grid.Column="3"/>
+            <ToggleButton Name="ToggleButton_Green"     Style="{StaticResource FilterButton}"   Content="Green"     Grid.Row="0"    Grid.Column="4"/>
+            <ToggleButton Name="ToggleButton_Red"       Style="{StaticResource FilterButton}"   Content="Red"       Grid.Row="0"    Grid.Column="5"/>
+            <ToggleButton Name="ToggleButton_null"      Style="{StaticResource FilterButton}"   Content="-"      Grid.Row="0"    Grid.Column="6"/>
+
+        </Grid>
+
+    <!-- COST -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+          
+            <TextBlock Grid.Column="0" Grid.RowSpan="2" Text="Cost" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
+            <ToggleButton Name="ToggleButton_Cost0"     Style="{StaticResource FilterButton}"   Content="0"     Grid.Column="1"/>
+            <ToggleButton Name="ToggleButton_Cost1"     Style="{StaticResource FilterButton}"   Content="1"     Grid.Column="2"/>
+            <ToggleButton Name="ToggleButton_Cost2"     Style="{StaticResource FilterButton}"   Content="2"     Grid.Column="3"/>
+            <ToggleButton Name="ToggleButton_Cost3"     Style="{StaticResource FilterButton}"   Content="3"     Grid.Column="4"/>
+            <ToggleButton Name="ToggleButton_Cost4"     Style="{StaticResource FilterButton}"   Content="4"     Grid.Column="5"/>
+            <ToggleButton Name="ToggleButton_Cost5"     Style="{StaticResource FilterButton}"   Content="5"     Grid.Column="6"/>
+            <ToggleButton Name="ToggleButton_Cost6"     Style="{StaticResource FilterButton}"   Content="6"     Grid.Column="7"/>
+            <ToggleButton Name="ToggleButton_Cost7plus" Style="{StaticResource FilterButton}"   Content="7+"    Grid.Column="8"/>
+        </Grid>
+
+    <!-- RARITY -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.RowSpan="2" Text="Rarity" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
+            <ToggleButton Name="ToggleButton_Common"    Style="{StaticResource FilterButton}"   Content="Common"    Grid.Column="1"/>
+            <ToggleButton Name="ToggleButton_Uncommon"  Style="{StaticResource FilterButton}"   Content="Uncommon"  Grid.Column="2"/>
+            <ToggleButton Name="ToggleButton_Rare"      Style="{StaticResource FilterButton}"   Content="Rare"      Grid.Column="3"/>
+            <ToggleButton Name="ToggleButton_Mythic"    Style="{StaticResource FilterButton}"   Content="Mythic"    Grid.Column="4"/>
+        </Grid>
+    
+    <!-- SET -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.RowSpan="2" Text="Set" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
+            <ComboBox Name="Combo_Set" Grid.Column="1">
+                <ComboBoxItem Content="Innistrad: Crimson Vow [VOW]"                                     />
+                <ComboBoxItem Content="Innistrad: Midnight Hunt [MID]"                                   />
+                <ComboBoxItem Content="Dungeons &amp; Dragons: Adventures in the Forgotten Realms [AFR]" />
+                <ComboBoxItem Content="Kaldheim [KHM]"                                                   />
+                <ComboBoxItem Content="Zendikar Rising [ZRN]"                                            />
+                <ComboBoxItem Content="Ikoria: Lair of Behemoths [IKO]"                                  />
+                <ComboBoxItem Content="Theros Beyond Death [THB]"                                        />
+                <ComboBoxItem Content="Throne of Eldraine [ELD]"                                         />
+                <ComboBoxItem Content="War of the Spark [WAR]"                                           />
+                <ComboBoxItem Content="Ravnica Allegiance [RNA]"                                         />
+                <ComboBoxItem Content="Guilds of Ravnica [GRN]"                                          />
+                <ComboBoxItem Content="Dominaria [DOM]"                                                  />
+                <ComboBoxItem Content="Rivals of Ixalan [RIX]"                                           />
+                <ComboBoxItem Content="Ixalan [XLN]"                                                     />
+                <ComboBoxItem Content="Core Set 2021 [M21]"                                              />
+                <ComboBoxItem Content="Core Set 2020 [M20]"                                              />
+                <ComboBoxItem Content="Core Set 2019 [M19]"                                              />
+                <ComboBoxItem Content="Magic Origins [ORI]"                                              />
+                <ComboBoxItem Content="Magic 2015 [M15]"                                                 />
+            </ComboBox>
+        </Grid>
+
+        <!-- NO DUPLICATES -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+        <CheckBox Grid.Column="1" Margin="0,5,0,0" Content="Hide duplicated name cards" FontSize="15" VerticalContentAlignment="Center" FontWeight="Bold"/>
+        </Grid>
+    </StackPanel>
 </UserControl>

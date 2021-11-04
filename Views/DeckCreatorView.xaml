@@ -44,9 +44,9 @@
                         Cursor="Hand" Background="#FFA9B4C2"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Margin="5" Background="DarkGray" Height="auto">
-                <StackPanel Orientation="Vertical" VerticalAlignment="Bottom"  Width="auto">
-                    <local:CollectionFilteringView Height="347" Margin="0,0,10,0" DataContext="{Binding fcVM}"/>
-                    <views:CardCollectionsView DataContext="{Binding ccVM}" Height="250" Margin="-10,0,0,-8"/>
+                <StackPanel Orientation="Vertical" VerticalAlignment="top"  Width="auto">
+                    <local:CollectionFilteringView Height="auto" Margin="0,0,10,0" DataContext="{Binding fcVM}"/>
+                    <views:CardCollectionsView DataContext="{Binding ccVM}" Height="auto" VerticalAlignment="Top" Margin="-10,0,0,-8"/>
                 </StackPanel>
                 <ListView ItemsSource='{Binding Source={StaticResource GroupedCards}}' SelectedItem="{Binding CurrentSelectedCard}"  BorderThickness="0" Width="430">
                     <ListView.GroupStyle>

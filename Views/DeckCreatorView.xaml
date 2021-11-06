@@ -3,20 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TCGManager.Views" 
+             xmlns:view="clr-namespace:TCGManager.Views" 
              xmlns:viewmodels="clr-namespace:TCGManager.ViewModels" 
              xmlns:views="clr-namespace:TCGManager.Views" 
 
              d:DataContext="{d:DesignInstance Type=viewmodels:DeckCreatorViewModel}"
              mc:Ignorable="d">
-    <UserControl.Resources>
-        <CollectionViewSource x:Key="GroupedCards" Source="{Binding DeckCardsCollection}">
-            <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Category"/>
-            </CollectionViewSource.GroupDescriptions>
-        </CollectionViewSource>
-    </UserControl.Resources>
-    
+
     <Grid Width="1300">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="771*"/>
@@ -39,87 +32,32 @@
                         Margin="5"
                         FontSize="20" FontWeight="ExtraBold"
                         Content="Add to Deck" IsEnabled="{Binding CardDetailsVM.IsCardSelected}"
-                        Command="{Binding AddCardToDeckCommand}"
+                        Command="{Binding DeckCollectionVM.AddCardToDeckCommand}"
                         VerticalAlignment="Center"
                         Cursor="Hand" Background="#FFA9B4C2"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Margin="5" Background="DarkGray" Height="auto">
                 <StackPanel Orientation="Vertical" VerticalAlignment="top"  Width="auto">
-                    <local:CollectionFilteringView Height="auto" Margin="0,0,10,0" DataContext="{Binding fcVM}"/>
-                    <views:CardCollectionsView DataContext="{Binding ccVM}" Height="auto" VerticalAlignment="Top" Margin="-10,0,0,-8"/>
+                    <view:CollectionFilteringView Height="auto"  Margin="2" DataContext="{Binding fcVM}"/>
+                    <views:CardCollectionsView DataContext="{Binding ccVM}" Height="398" VerticalAlignment="Top" Margin="-10,0,0,-8"/>
                 </StackPanel>
-                <ListView ItemsSource='{Binding Source={StaticResource GroupedCards}}' SelectedItem="{Binding CurrentSelectedCard}"  BorderThickness="0" Width="430">
-                    <ListView.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.ContainerStyle>
-                                <Style TargetType="{x:Type GroupItem}">
-                                    <Setter Property="Margin" Value="0,0,0,5"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                <Expander IsExpanded="True" BorderBrush="#FFA4B97F" BorderThickness="0,0,0,1">
-                                                    <Expander.Header>
-                                                        <DockPanel>
-                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,5,0" Width="auto"/>
-                                                            <TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}"/>
-                                                        </DockPanel>
-                                                    </Expander.Header>
-                                                    <Expander.Content>
-                                                        <ItemsPresenter/>
-                                                    </Expander.Content>
-                                                </Expander>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </GroupStyle.ContainerStyle>
-                        </GroupStyle>
-                    </ListView.GroupStyle>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="auto"  Header="Deck">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal"  Width="auto" Height="52">
-                                            <Image VerticalAlignment="Center" 
-                                               HorizontalAlignment="Center" 
-                                               Stretch="UniformToFill" 
-                                               Source="{Binding cards.GetFormattedImageURL}"
-                                               Width="150" 
-                                               Height="100"
-                                               Margin="-42,-60,-28,-50">
-                                                <Image.Clip>
-                                                    <RectangleGeometry RadiusX="10" RadiusY="10" Rect="45,30,75,50"/>
-                                                </Image.Clip>
-                                            </Image>
-                                            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                                <StackPanel Orientation="Horizontal" Width="auto" VerticalAlignment="Center">
-                                                    <TextBlock FontWeight="Bold" HorizontalAlignment="Center" TextAlignment="Center" Width="30" Height="25" FontSize="20" Text="{Binding quantity}" Padding="0,0,5,0"/>
-                                                    <TextBlock Width="205" FontSize="20" Text="{Binding cards.name}"/>
-                                                    <TextBlock Foreground="Black" FontWeight="Thin" Padding="0,0,7,0" Height="25" FontSize="12"  TextAlignment="Right" Text="{Binding cards.GetColorString}" Width="120"/>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal" Width="380">
-                                                    <StackPanel Orientation="Horizontal" Width="215">
-                                                        <TextBlock Foreground="Gray" Height="25" FontSize="15" Text="{Binding cards.type}" />
-                                                        <TextBlock Foreground="Gray" Height="25" FontSize="15">
-                                                            <TextBlock.Text>
-                                                                <MultiBinding StringFormat='({0}/{1})'>
-                                                                    <Binding Path="cards.power" Mode="OneWay" />
-                                                                    <Binding Path="cards.toughness" Mode="OneWay"/>
-                                                                </MultiBinding>
-                                                            </TextBlock.Text>
-                                                        </TextBlock>
-                                                    </StackPanel>
-                                                    <TextBlock Foreground="Black" Width="110" FontWeight="Thin" Padding="0,0,7,0" Height="25"  FontSize="12" TextAlignment="Right" Text="{Binding cards.setName}"/>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <StackPanel Orientation="Vertical">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width=".5*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Button Grid.Column="0" FontSize="20" Content="Save"/>
+                        <Button Grid.Column="1" FontSize="20" Content="Clear" Command="{Binding ClearDeckCommand}"/>
+                        <Button Grid.Column="3" FontSize="20" Content="Statistics"/>
+                    </Grid>
+                    <view:DeckCollectionView DataContext="{Binding DeckCollectionVM}"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </Grid>

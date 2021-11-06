@@ -35,50 +35,24 @@
                            Text="{Binding Name }" VerticalAlignment="Center" HorizontalAlignment="Center" 
                            FontSize="25" FontWeight="Bold"/>
 
-        <TextBlock Grid.Column="1" Grid.Row="3" 
-                           Text="Rarity:" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="2" Grid.Row="3" 
-                           Text="{Binding Rarity}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="4" 
-                           Text="Type:" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="2" Grid.Row="4" 
-                           Text="{Binding Type}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="5" 
-                           Text="Set:" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="2" Grid.Row="5" 
-                           Text="{Binding SetName}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="6" 
-                           Text="Mana cost:" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="2" Grid.Row="6" 
-                           Text="{Binding ManaCost}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="7" 
-                           Text="Description:" VerticalAlignment="Top"/>
-        <TextBlock Grid.Column="2" Grid.Row="7" Height="auto" TextWrapping="Wrap"
-                           Text="{Binding Description}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="8" 
-                           Text="Extra desc." VerticalAlignment="top"/>
-        <TextBlock Grid.Column="2" Grid.Row="8" Height="auto"  TextWrapping="Wrap"
-                           Text="{Binding Flavor}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="9" 
-                           Text="Damage" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="2" Grid.Row="9" 
-                           Text="{Binding Power}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="10" 
-                           Text="Toughness" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="2" Grid.Row="10" 
-                           Text="{Binding Toughness}" VerticalAlignment="Center"/>
-
-        <TextBlock Grid.Column="1" Grid.Row="11" 
-                           Text="Price" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="2" Grid.Row="11" 
-                           Text="{Binding Price}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="3" Text="Rarity:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" Grid.Row="3" Text="{Binding Rarity}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="4" Text="Type:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" Grid.Row="4" Text="{Binding Type}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="5" Text="Set:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" Grid.Row="5" Text="{Binding SetName}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="6" Text="Mana cost:" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" Grid.Row="6" Text="{Binding ManaCost}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="7" Text="Description:" VerticalAlignment="Top"/>
+        <TextBlock Grid.Column="2" Grid.Row="7" Height="auto" TextWrapping="Wrap"   Text="{Binding Description}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="8"   Text="Extra desc." VerticalAlignment="top"/>
+        <TextBlock Grid.Column="2" Grid.Row="8" Height="auto"  TextWrapping="Wrap" Text="{Binding Flavor}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="9"  Text="Damage" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" Grid.Row="9"    Text="{Binding Power}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="10"  Text="Toughness" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" Grid.Row="10"  Text="{Binding Toughness}" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Grid.Row="11"  Text="Price" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="2" Grid.Row="11"  Text="{Binding Price}" VerticalAlignment="Center"/>
 
     </Grid>
 </UserControl>

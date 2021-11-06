@@ -9,17 +9,32 @@ namespace TCGManager.ViewModels
 {
     public class CollectionFilteringViewModel : ViewModelBase
     {
+        public ObservableCollection<CardCollectionData> GetModel()
+        {
+            var model = orginalmodelbackup.ToList();
 
+            if (String.IsNullOrWhiteSpace(SelectedSet) == false)
+                model = model.Where(c => c.cards.setName == SelectedSet).ToList();
+            if (NoDuplicatesIsEnabled)
+                model = model.GroupBy(c => c.cards.name).Select(grp => grp.FirstOrDefault()).ToList();
+
+
+            return new ObservableCollection<CardCollectionData>(model);
+        }
+        public List<string> ListOfSetsInCollection { get; set; }
         public CollectionFilteringViewModel(CardCollectionViewModel _ccVM)
         {
+            ListOfSetsInCollection = CardCollection.SetsInCollection;
+            OnPropertyChanged(nameof(ListOfSetsInCollection));
             ccVM = _ccVM;
             orginalmodelbackup = _ccVM.model;
+            orginalmodelbackup_uniquenames = new ObservableCollection<CardCollectionData>(orginalmodelbackup.GroupBy(c => c.cards.name).Select(grp => grp.FirstOrDefault()));
 
-            FilteredModel = orginalmodelbackup;
+            FilteredModel = NoDuplicatesIsEnabled ? orginalmodelbackup_uniquenames : orginalmodelbackup;
             SetFilterPropertyCommand = new RelayCommand(
                 (object o) => // execute
                 {
-                    if(o is Array)
+                    if (o is Array)
                     {
                         ModifyFilter(new Multiparametr((object[])o));
                     }
@@ -35,8 +50,49 @@ namespace TCGManager.ViewModels
             );
         }
 
-        private readonly ObservableCollection<CardCollectionData> orginalmodelbackup;
+        public string SelectedSet {
+            get => _selectedSet;
+            set
+            {
+                _selectedSet = value;
+                if(String.IsNullOrWhiteSpace(value))
+                {
+                    // nie wybrano sortowania po secie
+                    ApplyFilters(GetModel());
+                    return;
+                }
+                
+                ApplyFilters(GetModel());
+            } 
+        }
+
+      
+
         public ObservableCollection<CardCollectionData> FilteredModel { get; set; }
+        public ICommand SetFilterPropertyCommand { get; set; }
+        public bool NoDuplicatesIsEnabled
+        {
+            get => noDuplicatesIsEnabled;
+            set
+            {
+                noDuplicatesIsEnabled = value;
+                ApplyFilters(GetModel());
+
+                OnPropertyChanged(nameof(noDuplicatesIsEnabled));
+            }
+        }
+
+        private string _nameFilter;
+        private bool noDuplicatesIsEnabled;
+        private List<string> _colorFilters = new List<string>();
+        private List<string> _costFilters = new List<string>();
+        private List<string> _rarityFilters = new List<string>();
+        private List<string> _typeFilters = new List<string>();
+        private string _selectedSet;
+        private readonly CardCollectionViewModel ccVM;
+        private readonly ObservableCollection<CardCollectionData> orginalmodelbackup;
+        private readonly ObservableCollection<CardCollectionData> orginalmodelbackup_uniquenames;
+
 
         private void ApplyFilters(ObservableCollection<CardCollectionData> model)
         {
@@ -50,23 +106,30 @@ namespace TCGManager.ViewModels
                     if (card.cards.name.Contains(_nameFilter) == false) continue;
                 }
 
-                if (_typeFilters.Count >0)
+                if (_typeFilters.Count > 0)
                 {
                     filtrationResult = true;
                     var spilittType = card.cards.type.Split(" ");
+
                     // przypadek typu karty Legendary Planeswalker ( dwu członowe )
-                    if(spilittType.Length>1)
+
+                    if (spilittType.Length > 1)
                     {
-                        if(card.cards.type.Split(" ")[1] == "Planeswalker")
+                        if (card.cards.type.Split(" ")[1] == "Planeswalker") // Legendary Planeswalker
                         {
                             spilittType[0] = "Planeswalker";
+                        }
+
+                        if (card.cards.type.Split(" ")[1] == "Land") // Land } Basic Land
+                        {
+                            spilittType[0] = "Land";
                         }
                     }
                     if (_typeFilters.Contains(spilittType[0]) == false)
                     {
                         filtrationResult = false;
                     }
-                    
+
                     if (filtrationResult == false) continue;
                 }
 
@@ -98,7 +161,7 @@ namespace TCGManager.ViewModels
                 {
                     filtrationResult = true;
 
-                    if(_costFilters.Contains("7plus"))
+                    if (_costFilters.Contains("7plus"))
                     {
                         if ((int)Double.Parse(card.cards.cmc.Replace(".", ",")) >= 7)
                         {
@@ -130,30 +193,30 @@ namespace TCGManager.ViewModels
                 filteredmodel.Add(filteredcard);
             }
             FilteredModel = filteredmodel;
+            ccVM.RefreshListUI(FilteredModel);
         }
-
-        private string _nameFilter;
-        private List<string> _colorFilters = new List<string>();
-        private readonly CardCollectionViewModel ccVM;
-
-
-        private List<string> _costFilters = new List<string>();
-        private List<string> _rarityFilters = new List<string>();
-
-        private List<string> _typeFilters = new List<string>();
-
-        public ICommand SetFilterPropertyCommand { get; set; }
-
         private void ModifyFilter(string namesearchvalue)
         {
             _nameFilter = namesearchvalue;
-            ApplyFilters(orginalmodelbackup);
-            ccVM.RefreshListUI(FilteredModel);
+            ApplyFilters(NoDuplicatesIsEnabled ? orginalmodelbackup_uniquenames : orginalmodelbackup);
         }
-
-        private void UpdateFilter(Multiparametr parameters, List<string> filterData, ref List<string> currentfiltervalues)
+        private void ModifyFilter(Multiparametr parametrs)
         {
 
+            if (parametrs == null) return;
+            //-----------------------------------------------------------
+            //  TOGGLE BUTTONS
+
+
+            UpdateFilter(parametrs, CardCollection.CardTypesList, ref _typeFilters);
+            UpdateFilter(parametrs, CardCollection.CardColorsList, ref _colorFilters);
+            UpdateFilter(parametrs, CardCollection.CardRairtyList, ref _rarityFilters);
+            UpdateFilter(parametrs, CardCollection.CardCostList, ref _costFilters);
+
+            ApplyFilters(GetModel());
+        }
+        private void UpdateFilter(Multiparametr parameters, List<string> filterData, ref List<string> currentfiltervalues)
+        {
             foreach (string _type in filterData)
             {
                 if (parameters.ParametrName.Contains(_type))
@@ -166,51 +229,14 @@ namespace TCGManager.ViewModels
             }
 
         }
-
-        private void ModifyFilter(Multiparametr parametrs)
-    {
-
-        if (parametrs == null) return;
-        //-----------------------------------------------------------
-        //  TOGGLE BUTTONS
-
-
-         UpdateFilter(parametrs, CardTypesList, ref _typeFilters);
-         UpdateFilter(parametrs, CardColorsList, ref _colorFilters);
-         UpdateFilter(parametrs, CardRairtyList, ref _rarityFilters);
-         UpdateFilter(parametrs, CardCostList, ref _costFilters);
-
-        ApplyFilters(orginalmodelbackup);
-        ccVM.RefreshListUI(FilteredModel);
-    }       
-
-       
-
         public enum Colors
-        {   
+        {
             Black,
             Blue,
             White,
             Red,
             Green
         }
-
-        public List<string> CardTypesList = new List<string>()
-        {
-            "Land","Creature","Sorcery","Instant","Enchantment","Artifact","Planeswalker"
-        };
-        public List<string> CardColorsList = new List<string>()
-        {
-            "Black","Blue","White","Green","Red","null"
-        };
-        public List<string> CardCostList = new List<string>()
-        {
-            "0","1","2","3","4","5","6","7plus"
-        };
-        public List<string> CardRairtyList = new List<string>()
-        {
-            "Common","Uncommon","Rare","Mythic"
-        };
     }
 
     internal class Multiparametr

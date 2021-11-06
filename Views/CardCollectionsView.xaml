@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TCGManager.Views"
-             xmlns:viewModel="clr-namespace:TCGManager.ViewModels" d:DataContext="{d:DesignInstance Type=viewModel:CardCollectionViewModel}"
-             mc:Ignorable="d" 
+             xmlns:viewModel="clr-namespace:TCGManager.ViewModels" 
+             d:DataContext="{d:DesignInstance Type=viewModel:CardCollectionViewModel}"
+             mc:Ignorable="d"
              x:Name="This">
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10">
@@ -18,7 +19,7 @@
             </TextBlock.Text>
         </TextBlock>
 
-        <ListView Name="CardsList" ItemsSource="{Binding model}" SelectedItem="{Binding CurrentSelectedCard}" Height="570" Width="461" >
+        <ListView Name="CardsList" ItemsSource="{Binding model}" SelectedItem="{Binding CurrentSelectedCard}" Height="570" Width="461">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal"  Width="430">

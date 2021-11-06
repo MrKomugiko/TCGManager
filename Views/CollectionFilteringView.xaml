@@ -134,7 +134,7 @@
             <ToggleButton Name="ToggleButton_Mythic"    Style="{StaticResource FilterButton}"   Content="Mythic"    Grid.Column="4"/>
         </Grid>
     
-    <!-- SET -->
+        <!-- SET -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50"/>
@@ -142,29 +142,9 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Grid.RowSpan="2" Text="Set" VerticalAlignment="Top" FontWeight="Bold" FontSize="15"/>
-            <ComboBox Name="Combo_Set" Grid.Column="1">
-                <ComboBoxItem Content="Innistrad: Crimson Vow [VOW]"                                     />
-                <ComboBoxItem Content="Innistrad: Midnight Hunt [MID]"                                   />
-                <ComboBoxItem Content="Dungeons &amp; Dragons: Adventures in the Forgotten Realms [AFR]" />
-                <ComboBoxItem Content="Kaldheim [KHM]"                                                   />
-                <ComboBoxItem Content="Zendikar Rising [ZRN]"                                            />
-                <ComboBoxItem Content="Ikoria: Lair of Behemoths [IKO]"                                  />
-                <ComboBoxItem Content="Theros Beyond Death [THB]"                                        />
-                <ComboBoxItem Content="Throne of Eldraine [ELD]"                                         />
-                <ComboBoxItem Content="War of the Spark [WAR]"                                           />
-                <ComboBoxItem Content="Ravnica Allegiance [RNA]"                                         />
-                <ComboBoxItem Content="Guilds of Ravnica [GRN]"                                          />
-                <ComboBoxItem Content="Dominaria [DOM]"                                                  />
-                <ComboBoxItem Content="Rivals of Ixalan [RIX]"                                           />
-                <ComboBoxItem Content="Ixalan [XLN]"                                                     />
-                <ComboBoxItem Content="Core Set 2021 [M21]"                                              />
-                <ComboBoxItem Content="Core Set 2020 [M20]"                                              />
-                <ComboBoxItem Content="Core Set 2019 [M19]"                                              />
-                <ComboBoxItem Content="Magic Origins [ORI]"                                              />
-                <ComboBoxItem Content="Magic 2015 [M15]"                                                 />
-            </ComboBox>
+            <ComboBox Grid.Column="1" ItemsSource="{Binding ListOfSetsInCollection, Mode=TwoWay}" SelectedValue="{Binding SelectedSet}" />
         </Grid>
-
+       
         <!-- NO DUPLICATES -->
         <Grid>
             <Grid.ColumnDefinitions>
@@ -176,7 +156,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-        <CheckBox Grid.Column="1" Margin="0,5,0,0" Content="Hide duplicated name cards" FontSize="15" VerticalContentAlignment="Center" FontWeight="Bold"/>
+        <CheckBox IsChecked="{Binding NoDuplicatesIsEnabled}" Grid.Column="1" Margin="0,5,0,0" Content="Show unique name cards [card quantity wont be refreshed]" FontSize="12" VerticalContentAlignment="Center" FontWeight="Bold"/>
         </Grid>
     </StackPanel>
 </UserControl>
